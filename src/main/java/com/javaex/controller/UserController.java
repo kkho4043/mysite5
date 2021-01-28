@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.javaex.dao.UserDao;
+import com.javaex.service.UserService;
 import com.javaex.vo.UserVo;
 
 @Controller
@@ -17,8 +18,9 @@ import com.javaex.vo.UserVo;
 public class UserController {
 
 	@Autowired
-	UserDao userDao;
-
+	private UserService userService;
+	
+	
 	// 회원가입 폼
 	@RequestMapping(value = "/joinForm", method = { RequestMethod.GET, RequestMethod.POST })
 	public String joinForm() {
@@ -32,9 +34,7 @@ public class UserController {
 	public String join(@ModelAttribute UserVo userVo) {
 		System.out.println("/user/join-----------------");
 		
-		System.out.println("join controller :" + userVo);
-		userDao.insert(userVo);
-
+		userService.join(userVo);
 		return "user/joinOk";
 	}
 
@@ -50,8 +50,8 @@ public class UserController {
 	public String login(@ModelAttribute UserVo userVo, HttpSession session) {
 		System.out.println("/user/login-----------------");
 		System.out.println("loginForm controller: " + userVo);
-
-		UserVo authUser = userDao.selectUser(userVo);
+		UserVo authUser = userService.login(userVo);
+		
 		System.out.println("uesr/selectUser:-----------------");
 		// 성공
 		if (authUser != null) {
@@ -83,7 +83,7 @@ public class UserController {
 		System.out.println("uesr/modifyForm:-----------------");
 		
 		UserVo userVo = (UserVo) session.getAttribute("authUser");
-		UserVo authUser = userDao.selectOne(userVo);
+		UserVo authUser = userService.modifyForm(userVo);
 		model.addAttribute("authUser", authUser);
 		return "user/modifyForm";
 	}
@@ -92,9 +92,9 @@ public class UserController {
 	@RequestMapping(value = "/modify", method = { RequestMethod.GET, RequestMethod.POST })
 	public String modify(@ModelAttribute UserVo userVo, HttpSession session) {
 		System.out.println("uesr/modify:-----------------");
-		userDao.update(userVo);
 		
-		UserVo authUser = userDao.selectUser(userVo);
+		userService.modify(userVo);
+		UserVo authUser = userService.login(userVo);
 		session.setAttribute("authUser",authUser);
 		
 		return "redirect:/";
