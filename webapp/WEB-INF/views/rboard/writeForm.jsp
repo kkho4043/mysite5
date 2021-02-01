@@ -48,8 +48,17 @@
 						<div class="form-group">
 							<textarea id="txt-content" name = "content"></textarea>
 						</div>
+						
+						<input type="text" name="groupno" value="${param.groupno}">
+						
+						<c:if test="${param.groupno != 0}"> <!-- 글쓰기 댓글이 아닐때. -->
+						<input type="text" name="orderno" value="${param.orderno}">
+						<input type="text" name="depth" value="${param.depth}">
+						</c:if>
+						
+						
 						<c:if test="${!empty sessionScope.authUser}">
-							<a id="btn_cancel" href="board/list">취소</a>
+							<a id="btn_cancel" href="rboard/list">취소</a>
 							
 							<button id="btn_add" type="submit" >등록</button>
 						</c:if>

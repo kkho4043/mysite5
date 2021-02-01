@@ -18,8 +18,6 @@
 		<c:import url ="/WEB-INF/views/include/header.jsp"></c:import >
 		<!-- aside 옮김 -->
 		<c:import url ="/WEB-INF/views/include/aside.jsp"></c:import >
-		
-		
 		<div id="content">
 
 			<div id="content-head">
@@ -36,28 +34,50 @@
 			<!-- //content-head -->
 
 			<div id="board">
-				<div id="writeForm">
-					<form action="write" method="get">
+				<div id="read">
+					<form action="" method="get">
+						<!-- 작성자 -->
+						<div class="form-group">
+							<span class="form-text">작성자</span>
+							<span class="form-value">${rboardVo.name}</span>
+						</div>
+						
+						<!-- 조회수 -->
+						<div class="form-group">
+							<span class="form-text">조회수</span>
+							<span class="form-value">${rboardVo.hit}</span>
+						</div>
+						
+						<!-- 작성일 -->
+						<div class="form-group">
+							<span class="form-text">작성일</span>
+							<span class="form-value">${rboardVo.regdate}</span>
+						</div>
+						
 						<!-- 제목 -->
 						<div class="form-group">
-							<label class="form-text" for="txt-title">제목</label>
-							<input type="text" id="txt-title" name="title" value="" placeholder="제목을 입력해 주세요">
+							<span class="form-text">제 목</span>
+							<span class="form-value">${rboardVo.title}</span>
 						</div>
 					
 						<!-- 내용 -->
-						<div class="form-group">
-							<textarea id="txt-content" name = "content"></textarea>
-						</div>
-						<c:if test="${!empty sessionScope.authUser}">
-							<a id="btn_cancel" href="board/list">취소</a>
+						<div id="txt-content">
+							<span class="form-value" >
+								${rboardVo.content}
+								groupno=${rboardVo.groupno}&orderno=${rboardVo.orderno}&depth=${rboardVo.depth}
+							</span>
 							
-							<button id="btn_add" type="submit" >등록</button>
+						</div>
+						<c:if test="${sessionScope.authUser.no == rboardVo.userno}"><a id="btn_modify" href="${pageContext.request.contextPath}/rboard/modifyForm?no=${rboardVo.no}">수정</a>
 						</c:if>
+						<c:if test="${!empty sessionScope.authUser}"><a id="btn_modify" href="${pageContext.request.contextPath}/rboard/writeForm?groupno=${rboardVo.groupno}&orderno=${rboardVo.orderno}&depth=${rboardVo.depth}">댓글</a>
+						</c:if>
+						<a id="btn_list" href="${pageContext.request.contextPath}/rboard/list">목록</a>
 						
 					</form>
 	                <!-- //form -->
 				</div>
-				<!-- //writeForm -->
+				<!-- //read -->
 			</div>
 			<!-- //board -->
 		</div>

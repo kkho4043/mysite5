@@ -35,37 +35,37 @@
 
 			<div id="board">
 				<div id="modifyForm">
-					<form action="${pageContext.request.contextPath}/board/modify" method="get">
+					<form action="${pageContext.request.contextPath}/rboard/modify" method="get">
 						<!-- 작성자 -->
 						<div class="form-group">
-							<span class="form-text">작성자</span> <span class="form-value">${boardVo.name}</span>
+							<span class="form-text">작성자</span> <span class="form-value">${rboardVo.name}</span>
 						</div>
 
 						<!-- 조회수 -->
 						<div class="form-group">
-							<span class="form-text">조회수</span> <span class="form-value">${boardVo.hit}</span>
+							<span class="form-text">조회수</span> <span class="form-value">${rboardVo.hit}</span>
 						</div>
 
 						<!-- 작성일 -->
 						<div class="form-group">
-							<span class="form-text">작성일</span> <span class="form-value">${boardVo.regdate}</span>
+							<span class="form-text">작성일</span> <span class="form-value">${rboardVo.regdate}</span>
 						</div>
 
 						<!-- 제목 -->
 						<div class="form-group">
-							<label class="form-text" for="txt-title">제목</label> <input type="text" id="txt-title" name="title" value="${boardVo.title}">
+							<label class="form-text" for="txt-title">제목</label> <input type="text" id="txt-title" name="title" value="${rboardVo.title}">
 						</div>
 
 
 						<!-- 내용 -->
 						<div class="form-group">
-							<textarea id="txt-content" name="content">${boardVo.content}</textarea>
+							<textarea id="txt-content" name="content">${rboardVo.content}</textarea>
 						</div>
-						<c:if test="${sessionScope.authUser.name eq boardVo.name}">
-							<a id="btn_cancel" href="${pageContext.request.contextPath}/board/list">취소</a>
+						<c:if test="${sessionScope.authUser.name eq rboardVo.name}">
+							<a id="btn_cancel" href="${pageContext.request.contextPath}/rboard/list">취소</a>
 							<button id="btn_modify" type="submit">수정</button>
 						</c:if>
-						<input type="text" name="no" value="${boardVo.no}">
+						<input type="text" name="no" value="${rboardVo.no}">
 
 
 					</form>

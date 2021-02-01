@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rboard">
+
+	<!-- 리스트 -->
+	<select id="rboardList" resultType="RboardVo">
+	 	<![CDATA[
+	 		SELECT   r.no no,
+			 		 r.title title,
+			         u.name name,
+			         r.hit hit,
+			         TO_CHAR((r.reg_date),'YYYY/MM/DD HH:MI') regdate,
+			         r.user_no userno,
+			         r.group_no groupno,
+			         r.order_no orderno,
+			         r.depth
+			 FROM rboard r ,users u
+			 where r.user_no = u.no
+			 order by r.group_no desc, r.order_no asc
+	 	]]>
+	</select>
+	<!-- 글저장 -->
+	<insert id="rboardInsert" parameterType="RboardVo">
+		<![CDATA[
+	 		insert into rboard
+			values(seq_rboard_no.nextval,
+				   #{userno},
+				   #{title},
+				   #{content},
+				   0,
+				   sysdate,
+				   seq_rboard_no.nextval,
+				   1,
+				   0
+				   )
+	 	]]>
+	</insert>
+	<!-- 댓글저장 -->
+	<insert id="rboardcommnet" parameterType="RboardVo">
+		<![CDATA[
+	 		insert into rboard
+			values(seq_rboard_no.nextval,
+				   #{userno},
+				   #{title},
+				   #{content},
+				   0,
+				   sysdate,
+				   #{groupno},
+				   #{orderno}+1,
+				   #{depth}+1
+				   )
+	 	]]>
+	</insert>
+	<!-- 댓글저장시 다른댓글의 order값 + -->
+	<update id="rboardorderplus" parameterType="RboardVo">
+		<![CDATA[
+			update rboard
+			set order_no = order_no + 1
+			where order_no > #{orderno}
+			and group_no = #{groupno}
+		]]>
+	</update>
+
+
+
+	<!-- 글 읽기 -->
+	<select id="rboardread" resultType="RboardVo" parameterType="int">
+	 	<![CDATA[
+	 		SELECT   r.no no,
+			 		 r.title title,
+			         u.name name,
+			         r.hit hit,
+			         TO_CHAR((r.reg_date),'YYYY/MM/DD HH:MI') regdate,
+			         r.content content,
+			         r.user_no userno,
+			         r.group_no groupno,
+			         r.order_no orderno,
+			         r.depth
+			 FROM rboard r , users u
+			 where r.user_no = u.no
+			 and r.no = #{no}
+	 	]]>
+	</select>
+
+	<!--글 읽기 hit + -->
+	<update id="rboardhit" parameterType="int">
+	 	<![CDATA[
+	 		update rboard 
+			set hit = hit+1
+			where no = #{no}
+	 	]]>
+	</update>
+
+	<!--글 수정 -->
+	<update id="rboardupdate" parameterType="RboardVo"> 
+		<![CDATA[ 
+				  update rboard
+				  set title = #{title},
+				  	  content = #{content}
+				  where no = #{no}
+		 ]]>
+	</update>
+	<!-- 글 삭제 -->
+	<update id="rboarddelete" parameterType="int"> 
+		<![CDATA[ 
+			update rboard 
+			set title = '삭제된 게시글입니다' ,
+				content = '삭제된 게시글입니다.'
+			where no = #{no}
+		 ]]>
+	</update>
+
+	<!--리스트 -->
+	<select id="rboardsearch" resultType="RboardVo" parameterType="String"> 
+	 <![CDATA[ 
+	 		SELECT r.no no,
+			 		 r.title title,
+			         u.name name,
+			         r.hit hit,
+			         TO_CHAR((r.reg_date),'YYYY/MM/DD HH:MI') regdate,
+			         r.user_no userno,
+			         r.group_no groupno,
+			         r.order_no orderno,
+			         r.depth
+			FROM rboard r , users u 
+			WHERE(
+					r.no LIKE '%'||#{str}||'%' 
+					or r.title LIKE '%'||#{str}||'%' 
+					or u.name LIKE '%'||#{str}||'%')
+			and r.user_no = u.no
+			order by r.group_no desc, r.order_no asc
+		]]>
+	</select>
+</mapper>

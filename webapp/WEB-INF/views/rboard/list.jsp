@@ -25,12 +25,12 @@
 		<div id="content">
 
 			<div id="content-head">
-				<h3>게시판</h3>
+				<h3>댓글 게시판</h3>
 				<div id="location">
 					<ul>
 						<li>홈</li>
 						<li>게시판</li>
-						<li class="last">일반게시판</li>
+						<li class="last">댓글게시판</li>
 					</ul>
 				</div>
 				<div class="clear"></div>
@@ -39,12 +39,12 @@
 
 			<div id="board">
 				<div id="list">
-					<form action="${pageContext.request.contextPath}/board/search" method="get">
+					<form action="${pageContext.request.contextPath}/rboard/search" method="get">
 						<div class="form-group text-right">
 							<c:if test="${param.action == 'search'}">
-								<a href="${pageContext.request.contextPath}/board/list">[원본으로]</a>
+								<a href="${pageContext.request.contextPath}/rboard/list">[원본으로]</a>
 							</c:if>
-							${fn:length(blist)}건 조회됨 <input type="text" name="str"> <input type="hidden" name="action" value="search">
+							${fn:length(rblist)}건 조회됨 <input type="text" name="str"> <input type="hidden" name="action" value="search">
 							<button type="submit" id=btn_search>검색</button>
 						</div>
 					</form>
@@ -61,15 +61,20 @@
 						</thead>
 						<tbody>
 
-							<c:forEach items="${blist}" var="vo" varStatus="status">
+							<c:forEach items="${rblist}" var="vo" varStatus="status">
 								<tr>
 									<td>${vo.no}</td>
-									<td class="text-left"><a href="${pageContext.request.contextPath}/board/read?no=${vo.no}">${vo.title}</a></td>
+									
+									
+									<td class="text-left"><c:forEach begin="1" end="${vo.depth}" step="1">&nbsp;&nbsp;&nbsp;</c:forEach><a href="${pageContext.request.contextPath}/rboard/read?no=${vo.no}">${vo.title}</a></td>
+									
+									
+									
 									<td>${vo.name}</td>
-									<td>${vo.hit}</td>
+									<td>${vo.hit} // ${vo.groupno} //${vo.orderno}//${vo.depth}</td>
 									<td>${vo.regdate}</td>
 									<td><c:if test="${authUser.no == vo.userno}">
-											<a href="${pageContext.request.contextPath}/board/delete?no=${vo.no}">[삭제]</a>
+											<a href="${pageContext.request.contextPath}/rboard/delete?no=${vo.no}">[삭제]</a>
 										</c:if></td>
 
 								</tr>
@@ -97,7 +102,7 @@
 						<div class="clear"></div>
 					</div>
 					<c:if test="${!empty sessionScope.authUser}">
-						<a id="btn_write" href="${pageContext.request.contextPath}/board/writeForm">글쓰기</a>
+						<a id="btn_write" href="${pageContext.request.contextPath}/rboard/writeForm?groupno=0">글쓰기</a>
 					</c:if>
 
 				</div>

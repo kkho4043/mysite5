@@ -16,7 +16,8 @@
 
 		<!-- header navi 옮김-->		
 		<c:import url ="/WEB-INF/views/include/header.jsp"></c:import >
-		
+		<!-- aside 옮김 -->
+		<c:import url ="/WEB-INF/views/include/aside.jsp"></c:import >
 		<div id="content">
 
 			<div id="content-head">
