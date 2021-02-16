@@ -28,6 +28,24 @@ public class UserService {
 		userDao.update(userVo);
 	}
 	
+	public String idcheck(String id) {
+		System.out.println("service idcheck : "+id);
+		UserVo userVo = userDao.selectid(id);
+		
+		String result = "";
+		if(userVo == null) {
+			//사용가능 id
+			result = "can";
+			
+		}else {
+			// 불가능 id
+			result = "cant";
+		}
+		
+		return result;
+		
+	}
+	
 	
 	
 

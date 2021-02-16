@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery/jquery-1.12.4.js"></script>
 <link href="${pageContext.request.contextPath}/assets/css/mysite.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
 
@@ -17,7 +18,7 @@
 		<!-- //header -->
 		<!-- //nav -->
 
-		<c:import url ="/WEB-INF/views/include/aside.jsp"></c:import >
+		<c:import url="/WEB-INF/views/include/aside.jsp"></c:import>
 		<!-- //aside -->
 
 		<div id="content">
@@ -36,15 +37,17 @@
 			<!-- //content-head -->
 
 			<div id="user">
-				<div id="joinForm">
-					<form action="${pageContext.request.contextPath}/user/join" method="get">
+				<div>
+					<form id="joinForm" action="${pageContext.request.contextPath}/user/join" method="get">
 
 						<!-- 아이디 -->
 						<div class="form-group">
 							<label class="form-text" for="input-uid">아이디</label> <input type="text" id="input-uid" name="id" value="" placeholder="아이디를 입력하세요">
-							<button type="button" id="">중복체크</button>
+							<button type="button" id="btnCheck">중복체크</button>
 						</div>
-
+						<p id = "msg">
+							<!-- 아이디 사용가능 여부 -->
+						</p>
 						<!-- 비밀번호 -->
 						<div class="form-group">
 							<label class="form-text" for="input-pass">패스워드</label> <input type="text" id="input-pass" name="password" value="" placeholder="비밀번호를 입력하세요">
@@ -89,5 +92,62 @@
 	<!-- //wrap -->
 
 </body>
+
+<script type="text/javascript">
+ $("#btnCheck").on("click",function(){
+	 
+	 var uid =  $("#input-uid").val();
+	 var upwd =  $("#input-pass").val();
+	 console.log(uid);
+	
+	 //데이터만 받기
+	 $.ajax({
+			url : "${pageContext.request.contextPath}/user/idcheck",		
+			type : "post",
+			//contentType : "application/json",
+			data : {id:uid,password:upwd},
+
+			dataType : "text",
+			success : function(result){
+				/*성공시 처리해야될 코드 작성*/
+				console.log(result);
+				if(result == 'can'){
+					
+					$("#msg").html("사용할수 있는 아이디 입니다.")
+				}else{
+					$("#msg").html("사용할수 없는 아이디 입니다.")
+				}
+			},
+			error : function(XHR, status, error) {
+				console.error(status + " : " + error);
+			}
+		});
+
+	 
+ });
+
+ $("#joinForm").on("submit",function(){
+	 
+	 //동의 여부 체크
+	 var check = $("#chk-agree").is(":checked");
+	 
+	//패스워드 체크
+	 var pw = $("#input-pass").val();
+	
+	 console.log(pw.length);
+	 if(pw.length < 8){
+		 alert("패스워드는 8글자 이상입니다.");
+		 return false
+	 }
+	 else if(!check){
+		 alert("약관에 동의해주세요")
+		 return false;
+	 }
+		 
+	
+	 return true;
+
+ })
+</script>
 
 </html>

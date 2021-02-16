@@ -72,5 +72,11 @@ public class GuestVo {
 	public void setDate(String date) {
 		this.date = date;
 	}
+
+	@Override
+	public String toString() {
+		return "GuestVo [guestno=" + guestno + ", name=" + name + ", password=" + password + ", content=" + content
+				+ ", date=" + date + "]";
+	}
 	
 }

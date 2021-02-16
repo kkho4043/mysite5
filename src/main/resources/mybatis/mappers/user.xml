@@ -51,5 +51,20 @@
 		]]>
 	
 	</update>
+	
+	
+	<!-- 수정시 select -->
+	<select id="selectId" parameterType="String" resultType="UserVo">
+		<![CDATA[
+			select 
+					no,
+        			id,
+        			name,
+        			gender
+			from users
+			where id = #{id}
+			
+		]]>
+	</select>
 
 </mapper>

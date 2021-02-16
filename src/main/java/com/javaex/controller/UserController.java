@@ -8,8 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.javaex.dao.UserDao;
 import com.javaex.service.UserService;
 import com.javaex.vo.UserVo;
 
@@ -98,6 +99,20 @@ public class UserController {
 		session.setAttribute("authUser",authUser);
 		
 		return "redirect:/";
+	}
+	
+	//중복확인 아이디 체크
+	@ResponseBody
+	@RequestMapping(value = "/idcheck", method = { RequestMethod.GET, RequestMethod.POST })
+	public String idcheck(@RequestParam("id") String id ,@RequestParam("password") String password) {
+		System.out.println("uesr/idcheck:-----------------");
+			System.out.println("id = " + id);
+			System.out.println("password = " + password);
+			String result = userService.idcheck(id);
+			System.out.println("controller : " +result );
+			
+		
+		return result; //@ResponseBody response 의 body 영역에 data만 보낸다
 	}
 
 }

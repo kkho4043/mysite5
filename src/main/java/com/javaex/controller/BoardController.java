@@ -1,5 +1,8 @@
 package com.javaex.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +79,28 @@ public class BoardController {
 		model.addAttribute("blist", boardService.getBoardsearch(str));
 
 		return "board/list";
+	}
+	
+	@RequestMapping(value = "/list2", method = { RequestMethod.GET, RequestMethod.POST })
+	public String list2(@RequestParam(value = "keyward",required = false,defaultValue = "") String keyward ,Model model) {
+		System.out.println("/board/list2-----------------");
+		System.out.println("keyward = " + keyward);
+		
+		//List<BoardVo> boardList = boardService.getBoardList2(keyward);
+		model.addAttribute("blist", boardService.getBoardList2(keyward));
+		return "board/list2";
+	}
+	
+	@RequestMapping(value = "/list3", method = { RequestMethod.GET, RequestMethod.POST })
+	public String list3(@RequestParam(value = "keyward",required = false,defaultValue = "") String keyward,
+						@RequestParam(value = "crtPage",required = false,defaultValue = "1") int crtPage ,Model model) {
+		System.out.println("/board/list3-----------------");
+		System.out.println("keyward = " + keyward);
+		
+		//Map<String,Object> pMap = boardService.getBoardList3(keyward,crtPage);
+		//System.out.println(pMap);
+		model.addAttribute("pMap", boardService.getBoardList3(keyward,crtPage));
+		return "board/list3";
 	}
 
 }

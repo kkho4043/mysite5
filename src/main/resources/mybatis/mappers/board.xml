@@ -14,10 +14,10 @@
 			         b.user_no userno
 			 FROM board b ,users u
 			 where b.user_no = u.no
-			 order by reg_date desc
+			 order by b.no desc
 	 	]]>
 	</select>
-	
+
 	<!-- 글저장 -->
 	<insert id="boardInsert" parameterType="BoardVo">
 		<![CDATA[
@@ -30,8 +30,8 @@
 				   #{no})
 	 	]]>
 	</insert>
-	
-	
+
+
 	<!-- 글 읽기 -->
 	<select id="boardread" resultType="BoardVo" parameterType="int">
 	 	<![CDATA[
@@ -48,7 +48,7 @@
 			 order by reg_date desc
 	 	]]>
 	</select>
-	
+
 	<!-- 글 읽기 hit + -->
 	<update id="boardhit" parameterType="int">
 	 	<![CDATA[
@@ -57,7 +57,7 @@
 			where no = #{no}
 	 	]]>
 	</update>
-	
+
 	<!-- 글 수정 -->
 	<update id="boardupdate" parameterType="BoardVo">
 	 	<![CDATA[
@@ -67,7 +67,7 @@
 			where no = #{no}
 	 	]]>
 	</update>
-	
+
 	<!-- 글 삭제 -->
 	<update id="boarddelete" parameterType="int">
 	 	<![CDATA[
@@ -75,8 +75,8 @@
 			where no = #{no}
 	 	]]>
 	</update>
-	
-	
+
+
 	<!-- 리스트 -->
 	<select id="boardsearch" resultType="BoardVo" parameterType="String">
 	 	<![CDATA[
@@ -87,13 +87,88 @@
 			         TO_CHAR((b.reg_date),'YYYY/MM/DD HH:MI') regdate,
 			         b.user_no userno
 			FROM board b , users u
-			WHERE(
+			WHERE
+		]]>
+		<if test="value != null and value != '' ">
+			(
 			b.no LIKE '%'||#{str}||'%'
 			or b.title LIKE '%'||#{str}||'%'
 			or u.name LIKE '%'||#{str}||'%' )
-			and b.user_no = u.no
-			order by reg_date desc
-			 
+			and
+		</if>
+
+	 	<![CDATA[
+	 		b.user_no = u.no
+	 		order by reg_date desc
+	 	]]>
+	</select>
+
+	<!-- 리스트3 -->
+	<select id="boardList3" resultType="BoardVo" parameterType="map">
+	 	<![CDATA[
+	 	select 
+	        r.rnum,
+	        r.no,
+	        r.title,
+	        r.name,
+	        r.hit,
+	        r.regdate
+		from (SELECT
+	       		rownum rnum,
+		        o.no,
+		        o.title,
+		        o.name,
+		        o.hit,
+		        o.regdate regdate
+		      FROM (SELECT
+		                b.no no,
+		                b.title title,
+		                u.name name,
+		                b.hit hit,
+		                TO_CHAR((b.reg_date),'YYYY/MM/DD HH:MM') regdate
+          			FROM board b,users u
+          			where
+         ]]>
+
+		<if test="keyward != null and keyward != '' ">
+			(
+			b.no LIKE '%'||#{keyward}||'%'
+			or b.title LIKE '%'||#{keyward}||'%'
+			or u.name LIKE '%'||#{keyward}||'%' )
+			and
+		</if>
+         
+        <![CDATA[
+          		 b.user_no = u.no
+         order by no desc)o)r
+   		 where r.rnum >= #{startNum}
+   		 and r.rnum <= #{endNum}
+
+	 	]]>
+
+
+
+	</select>
+
+	<!-- 글갯수 가져오기 -->
+	<select id="selectTotalCnt" resultType="int" parameterType="String">
+	 	<![CDATA[
+	 		SELECT
+   				count(*)
+				FROM board b,users u
+				where 
+		]]>
+		
+		<if test="value != null and value != '' ">
+			(
+			b.no LIKE '%'||#{keyward}||'%'
+			or b.title LIKE '%'||#{keyward}||'%'
+			or u.name LIKE '%'||#{keyward}||'%' )
+			and
+		</if>
+		<![CDATA[		
+			b.user_no = u.no
+			order by b.no desc
 	 	]]>
 	</select>
 </mapper>

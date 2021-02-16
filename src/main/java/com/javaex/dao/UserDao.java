@@ -35,11 +35,19 @@ public class UserDao {
 		System.out.println("\nuserDao.selectOne out : \n" + vo.toString());
 		return vo;
 	}
+
 	// 수정----->
-		public void update(UserVo userVo) {
-			System.out.println("\nuserDao.update IN: \n" + userVo.toString());
-			sqlSession.update("user.update",userVo);
-			System.out.println("\nuserDao.update OK: \n" + userVo.toString());
-		}
+	public void update(UserVo userVo) {
+		System.out.println("\nuserDao.update IN: \n" + userVo.toString());
+		sqlSession.update("user.update", userVo);
+		System.out.println("\nuserDao.update OK: \n" + userVo.toString());
+	}
+	
+	//회원가입 아이디 체크
+	public UserVo selectid(String id) {
+		System.out.println("dao idcheck :" + id);
+		return sqlSession.selectOne("user.selectId", id);
+	}
+	
 
 }

@@ -39,6 +39,8 @@
 	<!--저장 -->
 	<insert id="insert" parameterType="GuestVo">
 		<![CDATA[
+					
+		
 			insert into guestbook1
 			VALUES (SEQ_GUEST_NO.nextval,
 	        		#{name},
@@ -55,6 +57,38 @@
 			where no = #{no}
 		]]>
 	</delete>
+	
+	
+	<!--저장 key-->
+	<insert id="insertSelectKey" parameterType="GuestVo">
+		<selectKey keyProperty="guestno" resultType="int" order="BEFORE">	
+			select seq_guest_no.nextval from dual
+		</selectKey>
+
+	
+		<![CDATA[
+
+			insert into guestbook1
+			VALUES (#{guestno},
+	        		#{name},
+	        		#{password},
+	        		#{content},
+	        		SYSDATE)
+		]]>
+	</insert>
+	
+	<!--하나 가져오기 -->
+	<select id="select" resultMap="resultMapguestVo" parameterType="int">
+	 	<![CDATA[
+	 		SELECT no,
+      		   	   name,
+        	       content,
+        	       reg_date
+         	FROM guestbook1
+			where no = #{no}
+	 	]]>
+	</select>
+	
 
 
 </mapper>

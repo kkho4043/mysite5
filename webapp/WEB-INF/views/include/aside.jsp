@@ -10,15 +10,15 @@
 	<c:if test="${fn:contains(aa,'board')}">
 		<h2>게시판</h2>
 		<ul>
-			<li><a href="">일반게시판</a></li>
+			<li><a href="${pageContext.request.contextPath}/board/list">일반게시판</a></li>
 			<li><a href="${pageContext.request.contextPath}/rboard/list">댓글게시판</a></li>
 		</ul>
 	</c:if>
 	<c:if test="${fn:contains(aa,'guest')}">
 		<h2>방명록</h2>
 		<ul>
-			<li>일반방명록</li>
-			<li>ajax방명록</li>
+			<li><a href="${pageContext.request.contextPath}/guest/list">일반방명록</a></li>
+			<li><a href="${pageContext.request.contextPath}/guest/ajaxList">ajax방명록</a></li>
 		</ul>
 	</c:if>
 	<c:if test="${fn:contains(aa,'user')}">
